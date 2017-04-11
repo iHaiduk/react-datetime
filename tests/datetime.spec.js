@@ -940,7 +940,7 @@ describe('Datetime', () => {
 
 				utils.clickNthMonth(component, 2);
 				expect(onChangeFn).toHaveBeenCalledTimes(1);
-				expect(onChangeFn.mock.calls[0][0].toJSON()).toEqual('2000-03-15T01:02:02.002Z');
+				expect(onChangeFn.mock.calls[0][0].toJSON()).toEqual('2000-03-15T00:02:02.002Z');
 			});
 
 			it('when selecting year', () => {
