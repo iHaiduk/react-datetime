@@ -12,7 +12,7 @@ MIT: https://github.com/YouCanBookMe/react-datetime/raw/master/LICENSE
 		exports["Datetime"] = factory(require("React"), require("moment"), require("ReactDOM"));
 	else
 		root["Datetime"] = factory(root["React"], root["moment"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_16__, __WEBPACK_EXTERNAL_MODULE_20__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_15__, __WEBPACK_EXTERNAL_MODULE_19__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64,9 +64,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var assign = __webpack_require__(1),
 	        PropTypes = __webpack_require__(2),
 	        createClass = __webpack_require__(11),
-		moment = __webpack_require__(16),
+		moment = __webpack_require__(15),
 		React = __webpack_require__(12),
-		CalendarContainer = __webpack_require__(17)
+		CalendarContainer = __webpack_require__(16)
 	;
 
 	var TYPES = PropTypes;
@@ -505,40 +505,91 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ (function(module, exports) {
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
 	'use strict';
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
-	function ToObject(val) {
-		if (val == null) {
+	function toObject(val) {
+		if (val === null || val === undefined) {
 			throw new TypeError('Object.assign cannot be called with null or undefined');
 		}
 
 		return Object(val);
 	}
 
-	function ownEnumerableKeys(obj) {
-		var keys = Object.getOwnPropertyNames(obj);
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
 
-		if (Object.getOwnPropertySymbols) {
-			keys = keys.concat(Object.getOwnPropertySymbols(obj));
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
 		}
-
-		return keys.filter(function (key) {
-			return propIsEnumerable.call(obj, key);
-		});
 	}
 
-	module.exports = Object.assign || function (target, source) {
+	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 		var from;
-		var keys;
-		var to = ToObject(target);
+		var to = toObject(target);
+		var symbols;
 
 		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = ownEnumerableKeys(Object(from));
+			from = Object(arguments[s]);
 
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
 			}
 		}
 
@@ -757,6 +808,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -1095,6 +1150,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return emptyFunction.thatReturnsNull;
 	    }
 
+	    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	      var checker = arrayOfTypeCheckers[i];
+	      if (typeof checker !== 'function') {
+	        warning(
+	          false,
+	          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+	          'received %s at index %s.',
+	          getPostfixForTypeWarning(checker),
+	          i
+	        );
+	        return emptyFunction.thatReturnsNull;
+	      }
+	    }
+
 	    function validate(props, propName, componentName, location, propFullName) {
 	      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
 	        var checker = arrayOfTypeCheckers[i];
@@ -1227,6 +1296,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // This handles more types than `getPropType`. Only used for error messages.
 	  // See `createPrimitiveTypeChecker`.
 	  function getPreciseType(propValue) {
+	    if (typeof propValue === 'undefined' || propValue === null) {
+	      return '' + propValue;
+	    }
 	    var propType = getPropType(propValue);
 	    if (propType === 'object') {
 	      if (propValue instanceof Date) {
@@ -1236,6 +1308,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	    return propType;
+	  }
+
+	  // Returns a string that is postfixed to a warning about an invalid type.
+	  // For example, "undefined" or "of type array"
+	  function getPostfixForTypeWarning(value) {
+	    var type = getPreciseType(value);
+	    switch (type) {
+	      case 'array':
+	      case 'object':
+	        return 'an ' + type;
+	      case 'boolean':
+	      case 'date':
+	      case 'regexp':
+	        return 'a ' + type;
+	      default:
+	        return type;
+	    }
 	  }
 
 	  // Returns class name of the object, if any.
@@ -1629,9 +1718,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _assign = __webpack_require__(14);
+	var _assign = __webpack_require__(1);
 
-	var emptyObject = __webpack_require__(15);
+	var emptyObject = __webpack_require__(14);
 	var _invariant = __webpack_require__(6);
 
 	if (process.env.NODE_ENV !== 'production') {
@@ -2346,102 +2435,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
-
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
-
-	'use strict';
-	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
-
-			// Detect buggy property enumeration order in older V8 versions.
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
-
-			return true;
-		} catch (err) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
-		}
-	}
-
-	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ }),
-/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2466,21 +2459,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_16__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(12),
 	  createClass = __webpack_require__(11),
-	  DaysView = __webpack_require__(18),
-	  MonthsView = __webpack_require__(21),
-	  YearsView = __webpack_require__(22),
-	  TimeView = __webpack_require__(23)
+	  DaysView = __webpack_require__(17),
+	  MonthsView = __webpack_require__(20),
+	  YearsView = __webpack_require__(21),
+	  TimeView = __webpack_require__(22)
 	;
 
 	var CalendarContainer = createClass({
@@ -2500,15 +2493,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(12),
 	    createClass = __webpack_require__(11),
-		moment = __webpack_require__(16),
-	  onClickOutside = __webpack_require__(19)
+		moment = __webpack_require__(15),
+	  onClickOutside = __webpack_require__(18)
 	;
 
 	var DOM = React.DOM;
@@ -2651,7 +2644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -2943,7 +2936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function setupBinding(root, factory) {
 	    if (true) {
 	      // AMD. Register as an anonymous module.
-	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12),__webpack_require__(20),__webpack_require__(11)], __WEBPACK_AMD_DEFINE_RESULT__ = function(React, ReactDom, createReactClass) {
+	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12),__webpack_require__(19),__webpack_require__(11)], __WEBPACK_AMD_DEFINE_RESULT__ = function(React, ReactDom, createReactClass) {
 	        if (!createReactClass) createReactClass = React.createClass;
 	        return factory(root, React, ReactDom, createReactClass);
 	      }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -2966,20 +2959,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_19__;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(12),
 	    createClass = __webpack_require__(11),
-		onClickOutside = __webpack_require__(19)
+		onClickOutside = __webpack_require__(18)
 	;
 
 	var DOM = React.DOM;
@@ -3086,14 +3079,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(12),
 	    createClass = __webpack_require__(11),
-		onClickOutside = __webpack_require__(19)
+		onClickOutside = __webpack_require__(18)
 	;
 
 	var DOM = React.DOM;
@@ -3198,7 +3191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3206,7 +3199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(12),
 	    createClass = __webpack_require__(11),
 		assign = __webpack_require__(1),
-	  onClickOutside = __webpack_require__(19)
+	  onClickOutside = __webpack_require__(18)
 	;
 
 	var DOM = React.DOM;
