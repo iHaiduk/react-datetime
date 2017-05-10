@@ -1,18 +1,18 @@
 /*
-react-datetime v2.8.9
+react-datetime v2.8.10
 https://github.com/YouCanBookMe/react-datetime
 MIT: https://github.com/YouCanBookMe/react-datetime/raw/master/LICENSE
 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("moment"), require("React"), require("ReactDOM"));
+		module.exports = factory(require("React"), require("moment"), require("ReactDOM"));
 	else if(typeof define === 'function' && define.amd)
-		define(["moment", "React", "ReactDOM"], factory);
+		define(["React", "moment", "ReactDOM"], factory);
 	else if(typeof exports === 'object')
-		exports["Datetime"] = factory(require("moment"), require("React"), require("ReactDOM"));
+		exports["Datetime"] = factory(require("React"), require("moment"), require("ReactDOM"));
 	else
-		root["Datetime"] = factory(root["moment"], root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__) {
+		root["Datetime"] = factory(root["React"], root["moment"], root["ReactDOM"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_16__, __WEBPACK_EXTERNAL_MODULE_20__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -57,18 +57,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var assign = __webpack_require__(1),
-		moment = __webpack_require__(2),
-		React = __webpack_require__(3),
-		CalendarContainer = __webpack_require__(4)
+	        PropTypes = __webpack_require__(2),
+	        createClass = __webpack_require__(11),
+		moment = __webpack_require__(16),
+		React = __webpack_require__(12),
+		CalendarContainer = __webpack_require__(17)
 	;
 
-	var TYPES = React.PropTypes;
-	var Datetime = React.createClass({
+	var TYPES = PropTypes;
+	var Datetime = createClass({
 		propTypes: {
 			// value: TYPES.object | TYPES.string,
 			// defaultValue: TYPES.object | TYPES.string,
@@ -499,95 +501,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Datetime;
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
-
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
+/***/ (function(module, exports) {
 
 	'use strict';
-	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
-	function toObject(val) {
-		if (val === null || val === undefined) {
+	function ToObject(val) {
+		if (val == null) {
 			throw new TypeError('Object.assign cannot be called with null or undefined');
 		}
 
 		return Object(val);
 	}
 
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
+	function ownEnumerableKeys(obj) {
+		var keys = Object.getOwnPropertyNames(obj);
 
-			// Detect buggy property enumeration order in older V8 versions.
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
-
-			return true;
-		} catch (err) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
+		if (Object.getOwnPropertySymbols) {
+			keys = keys.concat(Object.getOwnPropertySymbols(obj));
 		}
+
+		return keys.filter(function (key) {
+			return propIsEnumerable.call(obj, key);
+		});
 	}
 
-	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	module.exports = Object.assign || function (target, source) {
 		var from;
-		var to = toObject(target);
-		var symbols;
+		var keys;
+		var to = ToObject(target);
 
 		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
+			from = arguments[s];
+			keys = ownEnumerableKeys(Object(from));
 
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
 			}
 		}
 
@@ -595,519 +546,1041 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
 
-/***/ },
+	if (process.env.NODE_ENV !== 'production') {
+	  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+	    Symbol.for &&
+	    Symbol.for('react.element')) ||
+	    0xeac7;
+
+	  var isValidElement = function(object) {
+	    return typeof object === 'object' &&
+	      object !== null &&
+	      object.$$typeof === REACT_ELEMENT_TYPE;
+	  };
+
+	  // By explicitly using `prop-types` you are opting into new development behavior.
+	  // http://fb.me/prop-types-in-prod
+	  var throwOnDirectAccess = true;
+	  module.exports = __webpack_require__(4)(isValidElement, throwOnDirectAccess);
+	} else {
+	  // By explicitly using `prop-types` you are opting into new production behavior.
+	  // http://fb.me/prop-types-in-prod
+	  module.exports = __webpack_require__(10)();
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+	// shim for using process in browser
+	var process = module.exports = {};
 
-/***/ },
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	(function () {
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
+	    }
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+
+
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+
+
+
+	}
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = runTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    runClearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        runTimeout(drainQueue);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(3),
-	  DaysView = __webpack_require__(5),
-	  MonthsView = __webpack_require__(15),
-	  YearsView = __webpack_require__(16),
-	  TimeView = __webpack_require__(17)
-	;
-
-	var CalendarContainer = React.createClass({
-		viewComponents: {
-			days: DaysView,
-			months: MonthsView,
-			years: YearsView,
-			time: TimeView
-		},
-
-	  render: function() {
-	    return React.createElement( this.viewComponents[ this.props.view ], this.props.viewProps );
-	  }
-	});
-
-	module.exports = CalendarContainer;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
 
 	'use strict';
 
-	var React = __webpack_require__(3),
-		moment = __webpack_require__(2),
-	  onClickOutside = __webpack_require__(6)
-	;
+	var emptyFunction = __webpack_require__(5);
+	var invariant = __webpack_require__(6);
+	var warning = __webpack_require__(7);
 
-	var DOM = React.DOM;
-	var DateTimePickerDays = onClickOutside( React.createClass({
-		render: function() {
-			var footer = this.renderFooter(),
-				date = this.props.viewDate,
-				locale = date.localeData(),
-				tableChildren
-			;
+	var ReactPropTypesSecret = __webpack_require__(8);
+	var checkPropTypes = __webpack_require__(9);
 
-			tableChildren = [
-				DOM.thead({ key: 'th' }, [
-					DOM.tr({ key: 'h' }, [
-						DOM.th({ key: 'p', className: 'rdtPrev' }, DOM.span({ onClick: this.props.subtractTime( 1, 'months' )}, '‹' )),
-						DOM.th({ key: 's', className: 'rdtSwitch', onClick: this.props.showView( 'months' ), colSpan: 5, 'data-value': this.props.viewDate.month() }, locale.months( date ) + ' ' + date.year() ),
-						DOM.th({ key: 'n', className: 'rdtNext' }, DOM.span({ onClick: this.props.addTime( 1, 'months' )}, '›' ))
-					]),
-					DOM.tr({ key: 'd'}, this.getDaysOfWeek( locale ).map( function( day, index ) { return DOM.th({ key: day + index, className: 'dow'}, day ); }) )
-				]),
-				DOM.tbody({ key: 'tb' }, this.renderDays())
-			];
-
-			if ( footer )
-				tableChildren.push( footer );
-
-			return DOM.div({ className: 'rdtDays' },
-				DOM.table({}, tableChildren )
-			);
-		},
-
-		/**
-		 * Get a list of the days of the week
-		 * depending on the current locale
-		 * @return {array} A list with the shortname of the days
-		 */
-		getDaysOfWeek: function( locale ) {
-			var days = locale._weekdaysMin,
-				first = locale.firstDayOfWeek(),
-				dow = [],
-				i = 0
-			;
-
-			days.forEach( function( day ) {
-				dow[ (7 + ( i++ ) - first) % 7 ] = day;
-			});
-
-			return dow;
-		},
-
-		renderDays: function() {
-			var date = this.props.viewDate,
-				selected = this.props.selectedDate && this.props.selectedDate.clone(),
-				prevMonth = date.clone().subtract( 1, 'months' ),
-				currentYear = date.year(),
-				currentMonth = date.month(),
-				weeks = [],
-				days = [],
-				renderer = this.props.renderDay || this.renderDay,
-				isValid = this.props.isValidDate || this.alwaysValidDate,
-				classes, isDisabled, dayProps, currentDate
-			;
-
-			// Go to the last week of the previous month
-			prevMonth.date( prevMonth.daysInMonth() ).startOf( 'week' );
-			var lastDay = prevMonth.clone().add( 42, 'd' );
-
-			while ( prevMonth.isBefore( lastDay ) ) {
-				classes = 'rdtDay';
-				currentDate = prevMonth.clone();
-
-				if ( ( prevMonth.year() === currentYear && prevMonth.month() < currentMonth ) || ( prevMonth.year() < currentYear ) )
-					classes += ' rdtOld';
-				else if ( ( prevMonth.year() === currentYear && prevMonth.month() > currentMonth ) || ( prevMonth.year() > currentYear ) )
-					classes += ' rdtNew';
-
-				if ( selected && prevMonth.isSame( selected, 'day' ) )
-					classes += ' rdtActive';
-
-				if ( prevMonth.isSame( moment(), 'day' ) )
-					classes += ' rdtToday';
-
-				isDisabled = !isValid( currentDate, selected );
-				if ( isDisabled )
-					classes += ' rdtDisabled';
-
-				dayProps = {
-					key: prevMonth.format( 'M_D' ),
-					'data-value': prevMonth.date(),
-					className: classes
-				};
-
-				if ( !isDisabled )
-					dayProps.onClick = this.updateSelectedDate;
-
-				days.push( renderer( dayProps, currentDate, selected ) );
-
-				if ( days.length === 7 ) {
-					weeks.push( DOM.tr({ key: prevMonth.format( 'M_D' )}, days ) );
-					days = [];
-				}
-
-				prevMonth.add( 1, 'd' );
-			}
-
-			return weeks;
-		},
-
-		updateSelectedDate: function( event ) {
-			this.props.updateSelectedDate( event, true );
-		},
-
-		renderDay: function( props, currentDate ) {
-			return DOM.td( props, currentDate.date() );
-		},
-
-		renderFooter: function() {
-			if ( !this.props.timeFormat )
-				return '';
-
-			var date = this.props.selectedDate || this.props.viewDate;
-
-			return DOM.tfoot({ key: 'tf'},
-				DOM.tr({},
-					DOM.td({ onClick: this.props.showView( 'time' ), colSpan: 7, className: 'rdtTimeToggle' }, date.format( this.props.timeFormat ))
-				)
-			);
-		},
-
-		alwaysValidDate: function() {
-			return 1;
-		},
-
-	  handleClickOutside: function() {
-	    this.props.handleClickOutside();
-	  }
-	}));
-
-	module.exports = DateTimePickerDays;
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * A higher-order-component for handling onClickOutside for React components.
-	 */
-	(function(root) {
-
-	  // administrative
-	  var registeredComponents = [];
-	  var handlers = [];
-	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
-	  var DEFAULT_EVENTS = ['mousedown', 'touchstart'];
+	module.exports = function(isValidElement, throwOnDirectAccess) {
+	  /* global Symbol */
+	  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+	  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
 
 	  /**
-	   * Check whether some DOM node is our Component's node.
+	   * Returns the iterator method function contained on the iterable object.
+	   *
+	   * Be sure to invoke the function with the iterable as context:
+	   *
+	   *     var iteratorFn = getIteratorFn(myIterable);
+	   *     if (iteratorFn) {
+	   *       var iterator = iteratorFn.call(myIterable);
+	   *       ...
+	   *     }
+	   *
+	   * @param {?object} maybeIterable
+	   * @return {?function}
 	   */
-	  var isNodeFound = function(current, componentNode, ignoreClass) {
-	    if (current === componentNode) {
-	      return true;
+	  function getIteratorFn(maybeIterable) {
+	    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+	    if (typeof iteratorFn === 'function') {
+	      return iteratorFn;
 	    }
-	    // SVG <use/> elements do not technically reside in the rendered DOM, so
-	    // they do not have classList directly, but they offer a link to their
-	    // corresponding element, which can have classList. This extra check is for
-	    // that case.
-	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
-	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
-	    if (current.correspondingElement) {
-	      return current.correspondingElement.classList.contains(ignoreClass);
-	    }
-	    return current.classList.contains(ignoreClass);
-	  };
-
-	  /**
-	   * Try to find our node in a hierarchy of nodes, returning the document
-	   * node as highest noode if our node is not found in the path up.
-	   */
-	  var findHighest = function(current, componentNode, ignoreClass) {
-	    if (current === componentNode) {
-	      return true;
-	    }
-
-	    // If source=local then this event came from 'somewhere'
-	    // inside and should be ignored. We could handle this with
-	    // a layered approach, too, but that requires going back to
-	    // thinking in terms of Dom node nesting, running counter
-	    // to React's 'you shouldn't care about the DOM' philosophy.
-	    while(current.parentNode) {
-	      if (isNodeFound(current, componentNode, ignoreClass)) {
-	        return true;
-	      }
-	      current = current.parentNode;
-	    }
-	    return current;
-	  };
-
-	  /**
-	   * Check if the browser scrollbar was clicked
-	   */
-	  var clickedScrollbar = function(evt) {
-	    return document.documentElement.clientWidth <= evt.clientX || document.documentElement.clientHeight <= evt.clientY;
-	  };
-
-	  /**
-	   * Generate the event handler that checks whether a clicked DOM node
-	   * is inside of, or lives outside of, our Component's node tree.
-	   */
-	  var generateOutsideCheck = function(componentNode, componentInstance, eventHandler, ignoreClass, excludeScrollbar, preventDefault, stopPropagation) {
-	    return function(evt) {
-	      if (preventDefault) {
-	        evt.preventDefault();
-	      }
-	      if (stopPropagation) {
-	        evt.stopPropagation();
-	      }
-	      var current = evt.target;
-	      if((excludeScrollbar && clickedScrollbar(evt)) || (findHighest(current, componentNode, ignoreClass) !== document)) {
-	        return;
-	      }
-	      eventHandler(evt);
-	    };
-	  };
-
-	  /**
-	   * This function generates the HOC function that you'll use
-	   * in order to impart onOutsideClick listening to an
-	   * arbitrary component. It gets called at the end of the
-	   * bootstrapping code to yield an instance of the
-	   * onClickOutsideHOC function defined inside setupHOC().
-	   */
-	  function setupHOC(root, React, ReactDOM, createReactClass) {
-
-	    // The actual Component-wrapping HOC:
-	    return function onClickOutsideHOC(Component, config) {
-	      var wrapComponentWithOnClickOutsideHandling = createReactClass({
-	        statics: {
-	          /**
-	           * Access the wrapped Component's class.
-	           */
-	          getClass: function() {
-	            if (Component.getClass) {
-	              return Component.getClass();
-	            }
-	            return Component;
-	          }
-	        },
-
-	        /**
-	         * Access the wrapped Component's instance.
-	         */
-	        getInstance: function() {
-	          return Component.prototype.isReactComponent ? this.refs.instance : this;
-	        },
-
-	        // this is given meaning in componentDidMount
-	        __outsideClickHandler: function() {},
-
-	        getDefaultProps: function() {
-	          return {
-	            excludeScrollbar: config && config.excludeScrollbar
-	          };
-	        },
-
-	        /**
-	         * Add click listeners to the current document,
-	         * linked to this component's state.
-	         */
-	        componentDidMount: function() {
-	          // If we are in an environment without a DOM such
-	          // as shallow rendering or snapshots then we exit
-	          // early to prevent any unhandled errors being thrown.
-	          if (typeof document === 'undefined' || !document.createElement){
-	            return;
-	          }
-
-	          var instance = this.getInstance();
-	          var clickOutsideHandler;
-
-	          if(config && typeof config.handleClickOutside === 'function') {
-	            clickOutsideHandler = config.handleClickOutside(instance);
-	            if(typeof clickOutsideHandler !== 'function') {
-	              throw new Error('Component lacks a function for processing outside click events specified by the handleClickOutside config option.');
-	            }
-	          } else if(typeof instance.handleClickOutside === 'function') {
-	            if (React.Component.prototype.isPrototypeOf(instance)) {
-	              clickOutsideHandler = instance.handleClickOutside.bind(instance);
-	            } else {
-	              clickOutsideHandler = instance.handleClickOutside;
-	            }
-	          } else if(typeof instance.props.handleClickOutside === 'function') {
-	            clickOutsideHandler = instance.props.handleClickOutside;
-	          } else {
-	            throw new Error('Component lacks a handleClickOutside(event) function for processing outside click events.');
-	          }
-
-	          var componentNode = ReactDOM.findDOMNode(instance);
-	          if (componentNode === null) {
-	            console.warn('Antipattern warning: there was no DOM node associated with the component that is being wrapped by outsideClick.');
-	            console.warn([
-	              'This is typically caused by having a component that starts life with a render function that',
-	              'returns `null` (due to a state or props value), so that the component \'exist\' in the React',
-	              'chain of components, but not in the DOM.\n\nInstead, you need to refactor your code so that the',
-	              'decision of whether or not to show your component is handled by the parent, in their render()',
-	              'function.\n\nIn code, rather than:\n\n  A{render(){return check? <.../> : null;}\n  B{render(){<A check=... />}\n\nmake sure that you',
-	              'use:\n\n  A{render(){return <.../>}\n  B{render(){return <...>{ check ? <A/> : null }<...>}}\n\nThat is:',
-	              'the parent is always responsible for deciding whether or not to render any of its children.',
-	              'It is not the child\'s responsibility to decide whether a render instruction from above should',
-	              'get ignored or not by returning `null`.\n\nWhen any component gets its render() function called,',
-	              'that is the signal that it should be rendering its part of the UI. It may in turn decide not to',
-	              'render all of *its* children, but it should never return `null` for itself. It is not responsible',
-	              'for that decision.'
-	            ].join(' '));
-	          }
-
-	          var fn = this.__outsideClickHandler = generateOutsideCheck(
-	            componentNode,
-	            instance,
-	            clickOutsideHandler,
-	            this.props.outsideClickIgnoreClass || IGNORE_CLASS,
-	            this.props.excludeScrollbar, // fallback not needed, prop always exists because of getDefaultProps
-	            this.props.preventDefault || false,
-	            this.props.stopPropagation || false
-	          );
-
-	          var pos = registeredComponents.length;
-	          registeredComponents.push(this);
-	          handlers[pos] = fn;
-
-	          // If there is a truthy disableOnClickOutside property for this
-	          // component, don't immediately start listening for outside events.
-	          if (!this.props.disableOnClickOutside) {
-	            this.enableOnClickOutside();
-	          }
-	        },
-
-	        /**
-	        * Track for disableOnClickOutside props changes and enable/disable click outside
-	        */
-	        componentWillReceiveProps: function(nextProps) {
-	          if (this.props.disableOnClickOutside && !nextProps.disableOnClickOutside) {
-	            this.enableOnClickOutside();
-	          } else if (!this.props.disableOnClickOutside && nextProps.disableOnClickOutside) {
-	            this.disableOnClickOutside();
-	          }
-	        },
-
-	        /**
-	         * Remove the document's event listeners
-	         */
-	        componentWillUnmount: function() {
-	          this.disableOnClickOutside();
-	          this.__outsideClickHandler = false;
-	          var pos = registeredComponents.indexOf(this);
-	          if( pos>-1) {
-	            // clean up so we don't leak memory
-	            if (handlers[pos]) { handlers.splice(pos, 1); }
-	            registeredComponents.splice(pos, 1);
-	          }
-	        },
-
-	        /**
-	         * Can be called to explicitly enable event listening
-	         * for clicks and touches outside of this element.
-	         */
-	        enableOnClickOutside: function() {
-	          var fn = this.__outsideClickHandler;
-	          if (typeof document !== 'undefined') {
-	            var events = this.props.eventTypes || DEFAULT_EVENTS;
-	            if (!events.forEach) {
-	              events = [events];
-	            }
-	            events.forEach(function (eventName) {
-	              document.addEventListener(eventName, fn);
-	            });
-	          }
-	        },
-
-	        /**
-	         * Can be called to explicitly disable event listening
-	         * for clicks and touches outside of this element.
-	         */
-	        disableOnClickOutside: function() {
-	          var fn = this.__outsideClickHandler;
-	          if (typeof document !== 'undefined') {
-	            var events = this.props.eventTypes || DEFAULT_EVENTS;
-	            if (!events.forEach) {
-	              events = [events];
-	            }
-	            events.forEach(function (eventName) {
-	              document.removeEventListener(eventName, fn);
-	            });
-	          }
-	        },
-
-	        /**
-	         * Pass-through render
-	         */
-	        render: function() {
-	          var passedProps = this.props;
-	          var props = {};
-	          Object.keys(this.props).forEach(function(key) {
-	            if (key !== 'excludeScrollbar') {
-	              props[key] = passedProps[key];
-	            }
-	          });
-	          if (Component.prototype.isReactComponent) {
-	            props.ref = 'instance';
-	          }
-	          props.disableOnClickOutside = this.disableOnClickOutside;
-	          props.enableOnClickOutside = this.enableOnClickOutside;
-	          return React.createElement(Component, props);
-	        }
-	      });
-
-	      // Add display name for React devtools
-	      (function bindWrappedComponentName(c, wrapper) {
-	        var componentName = c.displayName || c.name || 'Component';
-	        wrapper.displayName = 'OnClickOutside(' + componentName + ')';
-	      }(Component, wrapComponentWithOnClickOutsideHandling));
-
-	      return wrapComponentWithOnClickOutsideHandling;
-	    };
 	  }
 
 	  /**
-	   * This function sets up the library in ways that
-	   * work with the various modulde loading solutions
-	   * used in JavaScript land today.
+	   * Collection of methods that allow declaration and validation of props that are
+	   * supplied to React components. Example usage:
+	   *
+	   *   var Props = require('ReactPropTypes');
+	   *   var MyArticle = React.createClass({
+	   *     propTypes: {
+	   *       // An optional string prop named "description".
+	   *       description: Props.string,
+	   *
+	   *       // A required enum prop named "category".
+	   *       category: Props.oneOf(['News','Photos']).isRequired,
+	   *
+	   *       // A prop named "dialog" that requires an instance of Dialog.
+	   *       dialog: Props.instanceOf(Dialog).isRequired
+	   *     },
+	   *     render: function() { ... }
+	   *   });
+	   *
+	   * A more formal specification of how these methods are used:
+	   *
+	   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+	   *   decl := ReactPropTypes.{type}(.isRequired)?
+	   *
+	   * Each and every declaration produces a function with the same signature. This
+	   * allows the creation of custom validation functions. For example:
+	   *
+	   *  var MyLink = React.createClass({
+	   *    propTypes: {
+	   *      // An optional string or URI prop named "href".
+	   *      href: function(props, propName, componentName) {
+	   *        var propValue = props[propName];
+	   *        if (propValue != null && typeof propValue !== 'string' &&
+	   *            !(propValue instanceof URI)) {
+	   *          return new Error(
+	   *            'Expected a string or an URI for ' + propName + ' in ' +
+	   *            componentName
+	   *          );
+	   *        }
+	   *      }
+	   *    },
+	   *    render: function() {...}
+	   *  });
+	   *
+	   * @internal
 	   */
-	  function setupBinding(root, factory) {
-	    if (true) {
-	      // AMD. Register as an anonymous module.
-	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3),__webpack_require__(7),__webpack_require__(8)], __WEBPACK_AMD_DEFINE_RESULT__ = function(React, ReactDom, createReactClass) {
-	        if (!createReactClass) createReactClass = React.createClass;
-	        return factory(root, React, ReactDom, createReactClass);
-	      }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports === 'object') {
-	      // Node. Note that this does not work with strict
-	      // CommonJS, but only CommonJS-like environments
-	      // that support module.exports
-	      module.exports = factory(root, require('react'), require('react-dom'), require('create-react-class'));
+
+	  var ANONYMOUS = '<<anonymous>>';
+
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+	  var ReactPropTypes = {
+	    array: createPrimitiveTypeChecker('array'),
+	    bool: createPrimitiveTypeChecker('boolean'),
+	    func: createPrimitiveTypeChecker('function'),
+	    number: createPrimitiveTypeChecker('number'),
+	    object: createPrimitiveTypeChecker('object'),
+	    string: createPrimitiveTypeChecker('string'),
+	    symbol: createPrimitiveTypeChecker('symbol'),
+
+	    any: createAnyTypeChecker(),
+	    arrayOf: createArrayOfTypeChecker,
+	    element: createElementTypeChecker(),
+	    instanceOf: createInstanceTypeChecker,
+	    node: createNodeChecker(),
+	    objectOf: createObjectOfTypeChecker,
+	    oneOf: createEnumTypeChecker,
+	    oneOfType: createUnionTypeChecker,
+	    shape: createShapeTypeChecker
+	  };
+
+	  /**
+	   * inlined Object.is polyfill to avoid requiring consumers ship their own
+	   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	   */
+	  /*eslint-disable no-self-compare*/
+	  function is(x, y) {
+	    // SameValue algorithm
+	    if (x === y) {
+	      // Steps 1-5, 7-10
+	      // Steps 6.b-6.e: +0 != -0
+	      return x !== 0 || 1 / x === 1 / y;
 	    } else {
-	      // Browser globals (root is window)
-	      var createReactClass = React.createClass ? React.createClass : window.createReactClass;
-	      root.onClickOutside = factory(root, React, ReactDOM, createReactClass);
+	      // Step 6.a: NaN == NaN
+	      return x !== x && y !== y;
+	    }
+	  }
+	  /*eslint-enable no-self-compare*/
+
+	  /**
+	   * We use an Error-like object for backward compatibility as people may call
+	   * PropTypes directly and inspect their output. However, we don't use real
+	   * Errors anymore. We don't inspect their stack anyway, and creating them
+	   * is prohibitively expensive if they are created too often, such as what
+	   * happens in oneOfType() for any type before the one that matched.
+	   */
+	  function PropTypeError(message) {
+	    this.message = message;
+	    this.stack = '';
+	  }
+	  // Make `instanceof Error` still work for returned errors.
+	  PropTypeError.prototype = Error.prototype;
+
+	  function createChainableTypeChecker(validate) {
+	    if (process.env.NODE_ENV !== 'production') {
+	      var manualPropTypeCallCache = {};
+	      var manualPropTypeWarningCount = 0;
+	    }
+	    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+	      componentName = componentName || ANONYMOUS;
+	      propFullName = propFullName || propName;
+
+	      if (secret !== ReactPropTypesSecret) {
+	        if (throwOnDirectAccess) {
+	          // New behavior only for users of `prop-types` package
+	          invariant(
+	            false,
+	            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	            'Use `PropTypes.checkPropTypes()` to call them. ' +
+	            'Read more at http://fb.me/use-check-prop-types'
+	          );
+	        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
+	          // Old behavior for people using React.PropTypes
+	          var cacheKey = componentName + ':' + propName;
+	          if (
+	            !manualPropTypeCallCache[cacheKey] &&
+	            // Avoid spamming the console because they are often not actionable except for lib authors
+	            manualPropTypeWarningCount < 3
+	          ) {
+	            warning(
+	              false,
+	              'You are manually calling a React.PropTypes validation ' +
+	              'function for the `%s` prop on `%s`. This is deprecated ' +
+	              'and will throw in the standalone `prop-types` package. ' +
+	              'You may be seeing this warning due to a third-party PropTypes ' +
+	              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
+	              propFullName,
+	              componentName
+	            );
+	            manualPropTypeCallCache[cacheKey] = true;
+	            manualPropTypeWarningCount++;
+	          }
+	        }
+	      }
+	      if (props[propName] == null) {
+	        if (isRequired) {
+	          if (props[propName] === null) {
+	            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+	          }
+	          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+	        }
+	        return null;
+	      } else {
+	        return validate(props, propName, componentName, location, propFullName);
+	      }
+	    }
+
+	    var chainedCheckType = checkType.bind(null, false);
+	    chainedCheckType.isRequired = checkType.bind(null, true);
+
+	    return chainedCheckType;
+	  }
+
+	  function createPrimitiveTypeChecker(expectedType) {
+	    function validate(props, propName, componentName, location, propFullName, secret) {
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== expectedType) {
+	        // `propValue` being instance of, say, date/regexp, pass the 'object'
+	        // check, but we can offer a more precise error message here rather than
+	        // 'of type `object`'.
+	        var preciseType = getPreciseType(propValue);
+
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createAnyTypeChecker() {
+	    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
+	  }
+
+	  function createArrayOfTypeChecker(typeChecker) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (typeof typeChecker !== 'function') {
+	        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+	      }
+	      var propValue = props[propName];
+	      if (!Array.isArray(propValue)) {
+	        var propType = getPropType(propValue);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+	      }
+	      for (var i = 0; i < propValue.length; i++) {
+	        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+	        if (error instanceof Error) {
+	          return error;
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createElementTypeChecker() {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      if (!isValidElement(propValue)) {
+	        var propType = getPropType(propValue);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createInstanceTypeChecker(expectedClass) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (!(props[propName] instanceof expectedClass)) {
+	        var expectedClassName = expectedClass.name || ANONYMOUS;
+	        var actualClassName = getClassName(props[propName]);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createEnumTypeChecker(expectedValues) {
+	    if (!Array.isArray(expectedValues)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+	      return emptyFunction.thatReturnsNull;
+	    }
+
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      for (var i = 0; i < expectedValues.length; i++) {
+	        if (is(propValue, expectedValues[i])) {
+	          return null;
+	        }
+	      }
+
+	      var valuesString = JSON.stringify(expectedValues);
+	      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createObjectOfTypeChecker(typeChecker) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (typeof typeChecker !== 'function') {
+	        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+	      }
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== 'object') {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+	      }
+	      for (var key in propValue) {
+	        if (propValue.hasOwnProperty(key)) {
+	          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+	          if (error instanceof Error) {
+	            return error;
+	          }
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createUnionTypeChecker(arrayOfTypeCheckers) {
+	    if (!Array.isArray(arrayOfTypeCheckers)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+	      return emptyFunction.thatReturnsNull;
+	    }
+
+	    function validate(props, propName, componentName, location, propFullName) {
+	      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	        var checker = arrayOfTypeCheckers[i];
+	        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+	          return null;
+	        }
+	      }
+
+	      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createNodeChecker() {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (!isNode(props[propName])) {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createShapeTypeChecker(shapeTypes) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== 'object') {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+	      }
+	      for (var key in shapeTypes) {
+	        var checker = shapeTypes[key];
+	        if (!checker) {
+	          continue;
+	        }
+	        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+	        if (error) {
+	          return error;
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function isNode(propValue) {
+	    switch (typeof propValue) {
+	      case 'number':
+	      case 'string':
+	      case 'undefined':
+	        return true;
+	      case 'boolean':
+	        return !propValue;
+	      case 'object':
+	        if (Array.isArray(propValue)) {
+	          return propValue.every(isNode);
+	        }
+	        if (propValue === null || isValidElement(propValue)) {
+	          return true;
+	        }
+
+	        var iteratorFn = getIteratorFn(propValue);
+	        if (iteratorFn) {
+	          var iterator = iteratorFn.call(propValue);
+	          var step;
+	          if (iteratorFn !== propValue.entries) {
+	            while (!(step = iterator.next()).done) {
+	              if (!isNode(step.value)) {
+	                return false;
+	              }
+	            }
+	          } else {
+	            // Iterator will provide entry [k,v] tuples rather than values.
+	            while (!(step = iterator.next()).done) {
+	              var entry = step.value;
+	              if (entry) {
+	                if (!isNode(entry[1])) {
+	                  return false;
+	                }
+	              }
+	            }
+	          }
+	        } else {
+	          return false;
+	        }
+
+	        return true;
+	      default:
+	        return false;
 	    }
 	  }
 
-	  // Make it all happen
-	  setupBinding(root, setupHOC);
+	  function isSymbol(propType, propValue) {
+	    // Native Symbol.
+	    if (propType === 'symbol') {
+	      return true;
+	    }
 
-	}(this));
+	    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+	    if (propValue['@@toStringTag'] === 'Symbol') {
+	      return true;
+	    }
 
+	    // Fallback for non-spec compliant Symbols which are polyfilled.
+	    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+	      return true;
+	    }
 
-/***/ },
+	    return false;
+	  }
+
+	  // Equivalent of `typeof` but with special handling for array and regexp.
+	  function getPropType(propValue) {
+	    var propType = typeof propValue;
+	    if (Array.isArray(propValue)) {
+	      return 'array';
+	    }
+	    if (propValue instanceof RegExp) {
+	      // Old webkits (at least until Android 4.0) return 'function' rather than
+	      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+	      // passes PropTypes.object.
+	      return 'object';
+	    }
+	    if (isSymbol(propType, propValue)) {
+	      return 'symbol';
+	    }
+	    return propType;
+	  }
+
+	  // This handles more types than `getPropType`. Only used for error messages.
+	  // See `createPrimitiveTypeChecker`.
+	  function getPreciseType(propValue) {
+	    var propType = getPropType(propValue);
+	    if (propType === 'object') {
+	      if (propValue instanceof Date) {
+	        return 'date';
+	      } else if (propValue instanceof RegExp) {
+	        return 'regexp';
+	      }
+	    }
+	    return propType;
+	  }
+
+	  // Returns class name of the object, if any.
+	  function getClassName(propValue) {
+	    if (!propValue.constructor || !propValue.constructor.name) {
+	      return ANONYMOUS;
+	    }
+	    return propValue.constructor.name;
+	  }
+
+	  ReactPropTypes.checkPropTypes = checkPropTypes;
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * 
+	 */
+
+	function makeEmptyFunction(arg) {
+	  return function () {
+	    return arg;
+	  };
+	}
+
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	var emptyFunction = function emptyFunction() {};
+
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function () {
+	  return this;
+	};
+	emptyFunction.thatReturnsArgument = function (arg) {
+	  return arg;
+	};
+
+	module.exports = emptyFunction;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
 /* 7 */
-/***/ function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
 
-/***/ },
+	'use strict';
+
+	var emptyFunction = __webpack_require__(5);
+
+	/**
+	 * Similar to invariant but only logs a warning if the condition is not met.
+	 * This can be used to log issues in development environments in critical
+	 * paths. Removing the logging code for production environments will keep the
+	 * same logic and follow the same code paths.
+	 */
+
+	var warning = emptyFunction;
+
+	if (process.env.NODE_ENV !== 'production') {
+	  (function () {
+	    var printWarning = function printWarning(format) {
+	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+
+	      var argIndex = 0;
+	      var message = 'Warning: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      });
+	      if (typeof console !== 'undefined') {
+	        console.error(message);
+	      }
+	      try {
+	        // --- Welcome to debugging React ---
+	        // This error was thrown as a convenience so that you can use this stack
+	        // to find the callsite that caused this warning to fire.
+	        throw new Error(message);
+	      } catch (x) {}
+	    };
+
+	    warning = function warning(condition, format) {
+	      if (format === undefined) {
+	        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+	      }
+
+	      if (format.indexOf('Failed Composite propType: ') === 0) {
+	        return; // Ignore CompositeComponent proptype check.
+	      }
+
+	      if (!condition) {
+	        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+	          args[_key2 - 2] = arguments[_key2];
+	        }
+
+	        printWarning.apply(undefined, [format].concat(args));
+	      }
+	    };
+	  })();
+	}
+
+	module.exports = warning;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+	module.exports = ReactPropTypesSecret;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	if (process.env.NODE_ENV !== 'production') {
+	  var invariant = __webpack_require__(6);
+	  var warning = __webpack_require__(7);
+	  var ReactPropTypesSecret = __webpack_require__(8);
+	  var loggedTypeFailures = {};
+	}
+
+	/**
+	 * Assert that the values match with the type specs.
+	 * Error messages are memorized and will only be shown once.
+	 *
+	 * @param {object} typeSpecs Map of name to a ReactPropType
+	 * @param {object} values Runtime values that need to be type-checked
+	 * @param {string} location e.g. "prop", "context", "child context"
+	 * @param {string} componentName Name of the component for error messages.
+	 * @param {?Function} getStack Returns the component stack.
+	 * @private
+	 */
+	function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    for (var typeSpecName in typeSpecs) {
+	      if (typeSpecs.hasOwnProperty(typeSpecName)) {
+	        var error;
+	        // Prop type validation may throw. In case they do, we don't want to
+	        // fail the render phase where it didn't fail before. So we log it.
+	        // After these have been cleaned up, we'll let them throw.
+	        try {
+	          // This is intentionally an invariant that gets caught. It's the same
+	          // behavior as without this statement except with a better message.
+	          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', location, typeSpecName);
+	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+	        } catch (ex) {
+	          error = ex;
+	        }
+	        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+	        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+	          // Only monitor this failure once because there tends to be a lot of the
+	          // same error.
+	          loggedTypeFailures[error.message] = true;
+
+	          var stack = getStack ? getStack() : '';
+
+	          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+	        }
+	      }
+	    }
+	  }
+	}
+
+	module.exports = checkPropTypes;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	var emptyFunction = __webpack_require__(5);
+	var invariant = __webpack_require__(6);
+
+	module.exports = function() {
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	  function shim() {
+	    invariant(
+	      false,
+	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	      'Use PropTypes.checkPropTypes() to call them. ' +
+	      'Read more at http://fb.me/use-check-prop-types'
+	    );
+	  };
+	  shim.isRequired = shim;
+	  function getShim() {
+	    return shim;
+	  };
+	  var ReactPropTypes = {
+	    array: shim,
+	    bool: shim,
+	    func: shim,
+	    number: shim,
+	    object: shim,
+	    string: shim,
+	    symbol: shim,
+
+	    any: shim,
+	    arrayOf: getShim,
+	    element: shim,
+	    instanceOf: getShim,
+	    node: shim,
+	    objectOf: getShim,
+	    oneOf: getShim,
+	    oneOfType: getShim,
+	    shape: getShim
+	  };
+
+	  ReactPropTypes.checkPropTypes = emptyFunction;
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	/**
 	 * Copyright 2013-present, Facebook, Inc.
@@ -1121,8 +1594,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var React = __webpack_require__(3);
-	var factory = __webpack_require__(9);
+	var React = __webpack_require__(12);
+	var factory = __webpack_require__(13);
 
 	// Hack to grab NoopUpdateQueue from isomorphic React
 	var ReactNoopUpdateQueue = new React.Component().updater;
@@ -1134,9 +1607,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	);
 
 
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Copyright 2013-present, Facebook, Inc.
@@ -1150,13 +1629,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _assign = __webpack_require__(1);
+	var _assign = __webpack_require__(14);
 
-	var emptyObject = __webpack_require__(11);
-	var _invariant = __webpack_require__(12);
+	var emptyObject = __webpack_require__(15);
+	var _invariant = __webpack_require__(6);
 
 	if (process.env.NODE_ENV !== 'production') {
-	  var warning = __webpack_require__(13);
+	  var warning = __webpack_require__(7);
 	}
 
 	var MIXINS_KEY = 'mixins';
@@ -1863,197 +2342,107 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = factory;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
 
-	// shim for using process in browser
-	var process = module.exports = {};
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
 
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
+	'use strict';
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
-	var cachedSetTimeout;
-	var cachedClearTimeout;
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
 
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
-	(function () {
-	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
-	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
-	    }
-	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
-	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
-	    }
-	} ())
-	function runTimeout(fun) {
-	    if (cachedSetTimeout === setTimeout) {
-	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
-	        return setTimeout(fun, 0);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedSetTimeout(fun, 0);
-	    } catch(e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-	            return cachedSetTimeout.call(null, fun, 0);
-	        } catch(e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-	            return cachedSetTimeout.call(this, fun, 0);
-	        }
-	    }
-
-
-	}
-	function runClearTimeout(marker) {
-	    if (cachedClearTimeout === clearTimeout) {
-	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
-	        return clearTimeout(marker);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedClearTimeout(marker);
-	    } catch (e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-	            return cachedClearTimeout.call(null, marker);
-	        } catch (e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-	            return cachedClearTimeout.call(this, marker);
-	        }
-	    }
-
-
-
-	}
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
+		return Object(val);
 	}
 
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = runTimeout(cleanUpNextTick);
-	    draining = true;
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
 
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    runClearTimeout(timeout);
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
 	}
 
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        runTimeout(drainQueue);
-	    }
+	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
 	};
 
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
 
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -2074,202 +2463,533 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = emptyObject;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
+	module.exports = __WEBPACK_EXTERNAL_MODULE_16__;
 
-	'use strict';
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
+	var React = __webpack_require__(12),
+	  createClass = __webpack_require__(11),
+	  DaysView = __webpack_require__(18),
+	  MonthsView = __webpack_require__(21),
+	  YearsView = __webpack_require__(22),
+	  TimeView = __webpack_require__(23)
+	;
 
-	var validateFormat = function validateFormat(format) {};
+	var CalendarContainer = createClass({
+		viewComponents: {
+			days: DaysView,
+			months: MonthsView,
+			years: YearsView,
+			time: TimeView
+		},
 
-	if (process.env.NODE_ENV !== 'production') {
-	  validateFormat = function validateFormat(format) {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  };
-	}
-
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	      error.name = 'Invariant Violation';
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
+	  render: function() {
+	    return React.createElement( this.viewComponents[ this.props.view ], this.props.viewProps );
 	  }
-	}
+	});
 
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+	module.exports = CalendarContainer;
 
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var emptyFunction = __webpack_require__(14);
-
-	/**
-	 * Similar to invariant but only logs a warning if the condition is not met.
-	 * This can be used to log issues in development environments in critical
-	 * paths. Removing the logging code for production environments will keep the
-	 * same logic and follow the same code paths.
-	 */
-
-	var warning = emptyFunction;
-
-	if (process.env.NODE_ENV !== 'production') {
-	  (function () {
-	    var printWarning = function printWarning(format) {
-	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	        args[_key - 1] = arguments[_key];
-	      }
-
-	      var argIndex = 0;
-	      var message = 'Warning: ' + format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      });
-	      if (typeof console !== 'undefined') {
-	        console.error(message);
-	      }
-	      try {
-	        // --- Welcome to debugging React ---
-	        // This error was thrown as a convenience so that you can use this stack
-	        // to find the callsite that caused this warning to fire.
-	        throw new Error(message);
-	      } catch (x) {}
-	    };
-
-	    warning = function warning(condition, format) {
-	      if (format === undefined) {
-	        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-	      }
-
-	      if (format.indexOf('Failed Composite propType: ') === 0) {
-	        return; // Ignore CompositeComponent proptype check.
-	      }
-
-	      if (!condition) {
-	        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-	          args[_key2 - 2] = arguments[_key2];
-	        }
-
-	        printWarning.apply(undefined, [format].concat(args));
-	      }
-	    };
-	  })();
-	}
-
-	module.exports = warning;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-
-	function makeEmptyFunction(arg) {
-	  return function () {
-	    return arg;
-	  };
-	}
-
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	var emptyFunction = function emptyFunction() {};
-
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function () {
-	  return this;
-	};
-	emptyFunction.thatReturnsArgument = function (arg) {
-	  return arg;
-	};
-
-	module.exports = emptyFunction;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3),
-		onClickOutside = __webpack_require__(6)
+	var React = __webpack_require__(12),
+	    createClass = __webpack_require__(11),
+		moment = __webpack_require__(16),
+	  onClickOutside = __webpack_require__(19)
 	;
 
 	var DOM = React.DOM;
-	var DateTimePickerMonths = onClickOutside( React.createClass({
+	var DateTimePickerDays = onClickOutside( createClass({
+		render: function() {
+			var footer = this.renderFooter(),
+				date = this.props.viewDate,
+				locale = date.localeData(),
+				tableChildren
+			;
+
+			tableChildren = [
+				DOM.thead({ key: 'th' }, [
+					DOM.tr({ key: 'h' }, [
+						DOM.th({ key: 'p', className: 'rdtPrev', onClick: this.props.subtractTime( 1, 'months' )}, DOM.span({}, '‹' )),
+						DOM.th({ key: 's', className: 'rdtSwitch', onClick: this.props.showView( 'months' ), colSpan: 5, 'data-value': this.props.viewDate.month() }, locale.months( date ) + ' ' + date.year() ),
+						DOM.th({ key: 'n', className: 'rdtNext', onClick: this.props.addTime( 1, 'months' )}, DOM.span({}, '›' ))
+					]),
+					DOM.tr({ key: 'd'}, this.getDaysOfWeek( locale ).map( function( day, index ) { return DOM.th({ key: day + index, className: 'dow'}, day ); }) )
+				]),
+				DOM.tbody({ key: 'tb' }, this.renderDays())
+			];
+
+			if ( footer )
+				tableChildren.push( footer );
+
+			return DOM.div({ className: 'rdtDays' },
+				DOM.table({}, tableChildren )
+			);
+		},
+
+		/**
+		 * Get a list of the days of the week
+		 * depending on the current locale
+		 * @return {array} A list with the shortname of the days
+		 */
+		getDaysOfWeek: function( locale ) {
+			var days = locale._weekdaysMin,
+				first = locale.firstDayOfWeek(),
+				dow = [],
+				i = 0
+			;
+
+			days.forEach( function( day ) {
+				dow[ (7 + ( i++ ) - first) % 7 ] = day;
+			});
+
+			return dow;
+		},
+
+		renderDays: function() {
+			var date = this.props.viewDate,
+				selected = this.props.selectedDate && this.props.selectedDate.clone(),
+				prevMonth = date.clone().subtract( 1, 'months' ),
+				currentYear = date.year(),
+				currentMonth = date.month(),
+				weeks = [],
+				days = [],
+				renderer = this.props.renderDay || this.renderDay,
+				isValid = this.props.isValidDate || this.alwaysValidDate,
+				classes, isDisabled, dayProps, currentDate
+			;
+
+			// Go to the last week of the previous month
+			prevMonth.date( prevMonth.daysInMonth() ).startOf( 'week' );
+			var lastDay = prevMonth.clone().add( 42, 'd' );
+
+			while ( prevMonth.isBefore( lastDay ) ) {
+				classes = 'rdtDay';
+				currentDate = prevMonth.clone();
+
+				if ( ( prevMonth.year() === currentYear && prevMonth.month() < currentMonth ) || ( prevMonth.year() < currentYear ) )
+					classes += ' rdtOld';
+				else if ( ( prevMonth.year() === currentYear && prevMonth.month() > currentMonth ) || ( prevMonth.year() > currentYear ) )
+					classes += ' rdtNew';
+
+				if ( selected && prevMonth.isSame( selected, 'day' ) )
+					classes += ' rdtActive';
+
+				if ( prevMonth.isSame( moment(), 'day' ) )
+					classes += ' rdtToday';
+
+				isDisabled = !isValid( currentDate, selected );
+				if ( isDisabled )
+					classes += ' rdtDisabled';
+
+				dayProps = {
+					key: prevMonth.format( 'M_D' ),
+					'data-value': prevMonth.date(),
+					className: classes
+				};
+
+				if ( !isDisabled )
+					dayProps.onClick = this.updateSelectedDate;
+
+				days.push( renderer( dayProps, currentDate, selected ) );
+
+				if ( days.length === 7 ) {
+					weeks.push( DOM.tr({ key: prevMonth.format( 'M_D' )}, days ) );
+					days = [];
+				}
+
+				prevMonth.add( 1, 'd' );
+			}
+
+			return weeks;
+		},
+
+		updateSelectedDate: function( event ) {
+			this.props.updateSelectedDate( event, true );
+		},
+
+		renderDay: function( props, currentDate ) {
+			return DOM.td( props, currentDate.date() );
+		},
+
+		renderFooter: function() {
+			if ( !this.props.timeFormat )
+				return '';
+
+			var date = this.props.selectedDate || this.props.viewDate;
+
+			return DOM.tfoot({ key: 'tf'},
+				DOM.tr({},
+					DOM.td({ onClick: this.props.showView( 'time' ), colSpan: 7, className: 'rdtTimeToggle' }, date.format( this.props.timeFormat ))
+				)
+			);
+		},
+
+		alwaysValidDate: function() {
+			return 1;
+		},
+
+	  handleClickOutside: function() {
+	    this.props.handleClickOutside();
+	  }
+	}));
+
+	module.exports = DateTimePickerDays;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * A higher-order-component for handling onClickOutside for React components.
+	 */
+	(function(root) {
+
+	  // administrative
+	  var registeredComponents = [];
+	  var handlers = [];
+	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
+	  var DEFAULT_EVENTS = ['mousedown', 'touchstart'];
+
+	  /**
+	   * Check whether some DOM node is our Component's node.
+	   */
+	  var isNodeFound = function(current, componentNode, ignoreClass) {
+	    if (current === componentNode) {
+	      return true;
+	    }
+	    // SVG <use/> elements do not technically reside in the rendered DOM, so
+	    // they do not have classList directly, but they offer a link to their
+	    // corresponding element, which can have classList. This extra check is for
+	    // that case.
+	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
+	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
+	    if (current.correspondingElement) {
+	      return current.correspondingElement.classList.contains(ignoreClass);
+	    }
+	    return current.classList.contains(ignoreClass);
+	  };
+
+	  /**
+	   * Try to find our node in a hierarchy of nodes, returning the document
+	   * node as highest noode if our node is not found in the path up.
+	   */
+	  var findHighest = function(current, componentNode, ignoreClass) {
+	    if (current === componentNode) {
+	      return true;
+	    }
+
+	    // If source=local then this event came from 'somewhere'
+	    // inside and should be ignored. We could handle this with
+	    // a layered approach, too, but that requires going back to
+	    // thinking in terms of Dom node nesting, running counter
+	    // to React's 'you shouldn't care about the DOM' philosophy.
+	    while(current.parentNode) {
+	      if (isNodeFound(current, componentNode, ignoreClass)) {
+	        return true;
+	      }
+	      current = current.parentNode;
+	    }
+	    return current;
+	  };
+
+	  /**
+	   * Check if the browser scrollbar was clicked
+	   */
+	  var clickedScrollbar = function(evt) {
+	    return document.documentElement.clientWidth <= evt.clientX || document.documentElement.clientHeight <= evt.clientY;
+	  };
+
+	  /**
+	   * Generate the event handler that checks whether a clicked DOM node
+	   * is inside of, or lives outside of, our Component's node tree.
+	   */
+	  var generateOutsideCheck = function(componentNode, componentInstance, eventHandler, ignoreClass, excludeScrollbar, preventDefault, stopPropagation) {
+	    return function(evt) {
+	      if (preventDefault) {
+	        evt.preventDefault();
+	      }
+	      if (stopPropagation) {
+	        evt.stopPropagation();
+	      }
+	      var current = evt.target;
+	      if((excludeScrollbar && clickedScrollbar(evt)) || (findHighest(current, componentNode, ignoreClass) !== document)) {
+	        return;
+	      }
+	      eventHandler(evt);
+	    };
+	  };
+
+	  /**
+	   * This function generates the HOC function that you'll use
+	   * in order to impart onOutsideClick listening to an
+	   * arbitrary component. It gets called at the end of the
+	   * bootstrapping code to yield an instance of the
+	   * onClickOutsideHOC function defined inside setupHOC().
+	   */
+	  function setupHOC(root, React, ReactDOM, createReactClass) {
+
+	    // The actual Component-wrapping HOC:
+	    return function onClickOutsideHOC(Component, config) {
+	      var wrapComponentWithOnClickOutsideHandling = createReactClass({
+	        statics: {
+	          /**
+	           * Access the wrapped Component's class.
+	           */
+	          getClass: function() {
+	            if (Component.getClass) {
+	              return Component.getClass();
+	            }
+	            return Component;
+	          }
+	        },
+
+	        /**
+	         * Access the wrapped Component's instance.
+	         */
+	        getInstance: function() {
+	          return Component.prototype.isReactComponent ? this.refs.instance : this;
+	        },
+
+	        // this is given meaning in componentDidMount
+	        __outsideClickHandler: function() {},
+
+	        getDefaultProps: function() {
+	          return {
+	            excludeScrollbar: config && config.excludeScrollbar
+	          };
+	        },
+
+	        /**
+	         * Add click listeners to the current document,
+	         * linked to this component's state.
+	         */
+	        componentDidMount: function() {
+	          // If we are in an environment without a DOM such
+	          // as shallow rendering or snapshots then we exit
+	          // early to prevent any unhandled errors being thrown.
+	          if (typeof document === 'undefined' || !document.createElement){
+	            return;
+	          }
+
+	          var instance = this.getInstance();
+	          var clickOutsideHandler;
+
+	          if(config && typeof config.handleClickOutside === 'function') {
+	            clickOutsideHandler = config.handleClickOutside(instance);
+	            if(typeof clickOutsideHandler !== 'function') {
+	              throw new Error('Component lacks a function for processing outside click events specified by the handleClickOutside config option.');
+	            }
+	          } else if(typeof instance.handleClickOutside === 'function') {
+	            if (React.Component.prototype.isPrototypeOf(instance)) {
+	              clickOutsideHandler = instance.handleClickOutside.bind(instance);
+	            } else {
+	              clickOutsideHandler = instance.handleClickOutside;
+	            }
+	          } else if(typeof instance.props.handleClickOutside === 'function') {
+	            clickOutsideHandler = instance.props.handleClickOutside;
+	          } else {
+	            throw new Error('Component lacks a handleClickOutside(event) function for processing outside click events.');
+	          }
+
+	          var componentNode = ReactDOM.findDOMNode(instance);
+	          if (componentNode === null) {
+	            console.warn('Antipattern warning: there was no DOM node associated with the component that is being wrapped by outsideClick.');
+	            console.warn([
+	              'This is typically caused by having a component that starts life with a render function that',
+	              'returns `null` (due to a state or props value), so that the component \'exist\' in the React',
+	              'chain of components, but not in the DOM.\n\nInstead, you need to refactor your code so that the',
+	              'decision of whether or not to show your component is handled by the parent, in their render()',
+	              'function.\n\nIn code, rather than:\n\n  A{render(){return check? <.../> : null;}\n  B{render(){<A check=... />}\n\nmake sure that you',
+	              'use:\n\n  A{render(){return <.../>}\n  B{render(){return <...>{ check ? <A/> : null }<...>}}\n\nThat is:',
+	              'the parent is always responsible for deciding whether or not to render any of its children.',
+	              'It is not the child\'s responsibility to decide whether a render instruction from above should',
+	              'get ignored or not by returning `null`.\n\nWhen any component gets its render() function called,',
+	              'that is the signal that it should be rendering its part of the UI. It may in turn decide not to',
+	              'render all of *its* children, but it should never return `null` for itself. It is not responsible',
+	              'for that decision.'
+	            ].join(' '));
+	          }
+
+	          var fn = this.__outsideClickHandler = generateOutsideCheck(
+	            componentNode,
+	            instance,
+	            clickOutsideHandler,
+	            this.props.outsideClickIgnoreClass || IGNORE_CLASS,
+	            this.props.excludeScrollbar, // fallback not needed, prop always exists because of getDefaultProps
+	            this.props.preventDefault || false,
+	            this.props.stopPropagation || false
+	          );
+
+	          var pos = registeredComponents.length;
+	          registeredComponents.push(this);
+	          handlers[pos] = fn;
+
+	          // If there is a truthy disableOnClickOutside property for this
+	          // component, don't immediately start listening for outside events.
+	          if (!this.props.disableOnClickOutside) {
+	            this.enableOnClickOutside();
+	          }
+	        },
+
+	        /**
+	        * Track for disableOnClickOutside props changes and enable/disable click outside
+	        */
+	        componentWillReceiveProps: function(nextProps) {
+	          if (this.props.disableOnClickOutside && !nextProps.disableOnClickOutside) {
+	            this.enableOnClickOutside();
+	          } else if (!this.props.disableOnClickOutside && nextProps.disableOnClickOutside) {
+	            this.disableOnClickOutside();
+	          }
+	        },
+
+	        /**
+	         * Remove the document's event listeners
+	         */
+	        componentWillUnmount: function() {
+	          this.disableOnClickOutside();
+	          this.__outsideClickHandler = false;
+	          var pos = registeredComponents.indexOf(this);
+	          if( pos>-1) {
+	            // clean up so we don't leak memory
+	            if (handlers[pos]) { handlers.splice(pos, 1); }
+	            registeredComponents.splice(pos, 1);
+	          }
+	        },
+
+	        /**
+	         * Can be called to explicitly enable event listening
+	         * for clicks and touches outside of this element.
+	         */
+	        enableOnClickOutside: function() {
+	          var fn = this.__outsideClickHandler;
+	          if (typeof document !== 'undefined') {
+	            var events = this.props.eventTypes || DEFAULT_EVENTS;
+	            if (!events.forEach) {
+	              events = [events];
+	            }
+	            events.forEach(function (eventName) {
+	              document.addEventListener(eventName, fn);
+	            });
+	          }
+	        },
+
+	        /**
+	         * Can be called to explicitly disable event listening
+	         * for clicks and touches outside of this element.
+	         */
+	        disableOnClickOutside: function() {
+	          var fn = this.__outsideClickHandler;
+	          if (typeof document !== 'undefined') {
+	            var events = this.props.eventTypes || DEFAULT_EVENTS;
+	            if (!events.forEach) {
+	              events = [events];
+	            }
+	            events.forEach(function (eventName) {
+	              document.removeEventListener(eventName, fn);
+	            });
+	          }
+	        },
+
+	        /**
+	         * Pass-through render
+	         */
+	        render: function() {
+	          var passedProps = this.props;
+	          var props = {};
+	          Object.keys(this.props).forEach(function(key) {
+	            if (key !== 'excludeScrollbar') {
+	              props[key] = passedProps[key];
+	            }
+	          });
+	          if (Component.prototype.isReactComponent) {
+	            props.ref = 'instance';
+	          }
+	          props.disableOnClickOutside = this.disableOnClickOutside;
+	          props.enableOnClickOutside = this.enableOnClickOutside;
+	          return React.createElement(Component, props);
+	        }
+	      });
+
+	      // Add display name for React devtools
+	      (function bindWrappedComponentName(c, wrapper) {
+	        var componentName = c.displayName || c.name || 'Component';
+	        wrapper.displayName = 'OnClickOutside(' + componentName + ')';
+	      }(Component, wrapComponentWithOnClickOutsideHandling));
+
+	      return wrapComponentWithOnClickOutsideHandling;
+	    };
+	  }
+
+	  /**
+	   * This function sets up the library in ways that
+	   * work with the various modulde loading solutions
+	   * used in JavaScript land today.
+	   */
+	  function setupBinding(root, factory) {
+	    if (true) {
+	      // AMD. Register as an anonymous module.
+	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12),__webpack_require__(20),__webpack_require__(11)], __WEBPACK_AMD_DEFINE_RESULT__ = function(React, ReactDom, createReactClass) {
+	        if (!createReactClass) createReactClass = React.createClass;
+	        return factory(root, React, ReactDom, createReactClass);
+	      }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports === 'object') {
+	      // Node. Note that this does not work with strict
+	      // CommonJS, but only CommonJS-like environments
+	      // that support module.exports
+	      module.exports = factory(root, require('react'), require('react-dom'), require('create-react-class'));
+	    } else {
+	      // Browser globals (root is window)
+	      var createReactClass = React.createClass ? React.createClass : window.createReactClass;
+	      root.onClickOutside = factory(root, React, ReactDOM, createReactClass);
+	    }
+	  }
+
+	  // Make it all happen
+	  setupBinding(root, setupHOC);
+
+	}(this));
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(12),
+	    createClass = __webpack_require__(11),
+		onClickOutside = __webpack_require__(19)
+	;
+
+	var DOM = React.DOM;
+	var DateTimePickerMonths = onClickOutside( createClass({
 		render: function() {
 			return DOM.div({ className: 'rdtMonths' }, [
 				DOM.table({ key: 'a' }, DOM.thead( {}, DOM.tr( {}, [
-					DOM.th({ key: 'prev', className: 'rdtPrev' }, DOM.span({ onClick: this.props.subtractTime( 1, 'years' )}, '‹' )),
+					DOM.th({ key: 'prev', className: 'rdtPrev', onClick: this.props.subtractTime( 1, 'years' )}, DOM.span({}, '‹' )),
 					DOM.th({ key: 'year', className: 'rdtSwitch', onClick: this.props.showView( 'years' ), colSpan: 2, 'data-value': this.props.viewDate.year() }, this.props.viewDate.year() ),
-					DOM.th({ key: 'next', className: 'rdtNext' }, DOM.span({ onClick: this.props.addTime( 1, 'years' )}, '›' ))
+					DOM.th({ key: 'next', className: 'rdtNext', onClick: this.props.addTime( 1, 'years' )}, DOM.span({}, '›' ))
 				]))),
 				DOM.table({ key: 'months' }, DOM.tbody({ key: 'b' }, this.renderMonths()))
 			]);
@@ -2365,26 +3085,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DateTimePickerMonths;
 
 
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var React = __webpack_require__(3),
-		onClickOutside = __webpack_require__(6)
+	var React = __webpack_require__(12),
+	    createClass = __webpack_require__(11),
+		onClickOutside = __webpack_require__(19)
 	;
 
 	var DOM = React.DOM;
-	var DateTimePickerYears = onClickOutside( React.createClass({
+	var DateTimePickerYears = onClickOutside( createClass({
 		render: function() {
 			var year = parseInt( this.props.viewDate.year() / 10, 10 ) * 10;
 
 			return DOM.div({ className: 'rdtYears' }, [
 				DOM.table({ key: 'a' }, DOM.thead({}, DOM.tr({}, [
-					DOM.th({ key: 'prev', className: 'rdtPrev' }, DOM.span({ onClick: this.props.subtractTime( 10, 'years' )}, '‹' )),
+					DOM.th({ key: 'prev', className: 'rdtPrev', onClick: this.props.subtractTime( 10, 'years' )}, DOM.span({}, '‹' )),
 					DOM.th({ key: 'year', className: 'rdtSwitch', onClick: this.props.showView( 'years' ), colSpan: 2 }, year + '-' + ( year + 9 ) ),
-					DOM.th({ key: 'next', className: 'rdtNext' }, DOM.span({ onClick: this.props.addTime( 10, 'years' )}, '›' ))
+					DOM.th({ key: 'next', className: 'rdtNext', onClick: this.props.addTime( 10, 'years' )}, DOM.span({}, '›' ))
 					]))),
 				DOM.table({ key: 'years' }, DOM.tbody( {}, this.renderYears( year )))
 			]);
@@ -2476,19 +3197,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DateTimePickerYears;
 
 
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var React = __webpack_require__(3),
+	var React = __webpack_require__(12),
+	    createClass = __webpack_require__(11),
 		assign = __webpack_require__(1),
-	  onClickOutside = __webpack_require__(6)
+	  onClickOutside = __webpack_require__(19)
 	;
 
 	var DOM = React.DOM;
-	var DateTimePickerTime = onClickOutside( React.createClass({
+	var DateTimePickerTime = onClickOutside( createClass({
 		getInitialState: function() {
 			return this.calculateState( this.props );
 		},
@@ -2710,7 +3432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DateTimePickerTime;
 
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
